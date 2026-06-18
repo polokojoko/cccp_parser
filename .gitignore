@@ -1,0 +1,4 @@
+*.session
+logs/
+downloads/
+config.yaml

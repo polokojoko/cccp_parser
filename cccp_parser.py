@@ -85,7 +85,7 @@ def log_init( ):
 
 def init_env( ):
     os.makedirs( 'logs', exist_ok = True )
-    os.makedirs( , exist_ok = True )
+    os.makedirs( 'downloads', exist_ok = True )
 
 async def main( ):
     log_init( )
