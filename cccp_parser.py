@@ -12,8 +12,8 @@ config_tg = config[ 'TG' ]
 config_ya = config[ 'YA' ]
 config_gl = config[ 'GLOBAL' ]
 
-client = TelegramClient( config_tg[ 'session_name' ], api_id=config_tg[ 'api_id' ], api_hash=config_tg[ 'api_hash' ] )
-y = yadisk.AsyncClient( token=config_ya[ 'token' ] )
+client = TelegramClient( config_tg[ 'session_name' ], api_id = config_tg[ 'api_id' ], api_hash = config_tg[ 'api_hash' ] )
+y = yadisk.AsyncClient( token = config_ya[ 'token' ] )
 
 @client.on( events.NewMessage( chats = [ channel[ 'id'] for channel in config_tg[ 'channels' ] ] ) )
 async def handler(event):
