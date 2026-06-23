@@ -22,15 +22,14 @@ async def handler(event):
 
     logging.info( f'channel ID = {channel_id}' )
     logging.info( f'topic_id = {topic_id}' )
-    # logging.info( f'event: {event}' )
+    #logging.info( f'event: {event}' )
 
     try:
-        if topic_id != ( next( ch for ch in config_tg[ 'channels' ] if ch[ 'id' ] == channel_id ), None ) or not event.media:
+        if not any( channel[ 'id' ] == channel_id and channel[ 'tp' ] == topic_id for channel in config_tg[ 'channels' ] ) or not event.media:
             return
 
         logging.info( '    [!] event has media' )
 
-        # По умолчанию сохраняет в папку downloads/ в директории скрипта на сервере
         file_path = await client.download_media( event.message, file = config_gl[ 'download_path' ] )
 
         logging.info( f'file_path: {file_path}' )
@@ -67,7 +66,7 @@ async def ya_init( ):
 
     for ch_name in [ channel[ 'name' ] for channel in config_tg[ 'channels' ] ]:
         dir = f'{config_ya[ "upload_path" ]}/{ch_name}'
-        logging.info( dir )
+        # logging.info( dir )
         if not await y.is_dir( dir ):
             await y.mkdir( dir )
             logging.info( f'    [!] created: {dir}' )
