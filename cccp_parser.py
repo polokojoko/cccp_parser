@@ -19,13 +19,15 @@ y = yadisk.AsyncClient( token = config_ya[ 'token' ] )
 async def handler(event):
     channel_id = event.message.peer_id.channel_id
     topic_id = event.message.reply_to.reply_to_top_id or event.message.reply_to.reply_to_msg_id
+    channel_conf = next( ( channel for channel in config_tg[ 'channels' ] if channel[ "id" ] == channel_id ), None )
 
     logging.info( f'channel ID = {channel_id}' )
     logging.info( f'topic_id = {topic_id}' )
-    #logging.info( f'event: {event}' )
+    logging.info( f'channel_config: {channel_conf}' )
 
     try:
-        if not any( channel[ 'id' ] == channel_id and channel[ 'tp' ] == topic_id for channel in config_tg[ 'channels' ] ) or not event.media:
+        if channel_conf[ 'tp' ] != topic_id or not event.media:
+            logging.info( f'return' )
             return
 
         logging.info( '    [!] event has media' )
@@ -40,8 +42,11 @@ async def handler(event):
 
         # 2. Подготовка пути для Яндекс.Диска
         filename = os.path.basename( file_path )
-        yandex_path = f"{config_ya[ 'upload_path' ]}/{filename}"
+        name, ext = os.path.splitext( filename )
+        dist_name = f'{name}_{datetime.now( ).strftime( "%d-%m-%Y %H-%M-%S" )}{ext}'
+        yandex_path = f"{config_ya[ 'upload_path' ]}/{channel_conf['name']}/{dist_name}"
 
+        logging.info( yandex_path )
         # 3. Загрузка файла на Яндекс.Диск#
         await y.upload( file_path, yandex_path )
 

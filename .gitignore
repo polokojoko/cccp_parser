@@ -1,5 +1,5 @@
+*.session
 *.session-journal
 logs/
 downloads/
 config.yaml
-*.session
